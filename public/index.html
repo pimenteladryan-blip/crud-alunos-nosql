@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a43">
+  <title>CRUD de Alunos | NoSQL</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="container topo-conteudo">
+      <div class="marca"><span class="marca-icone">DB</span><div><p class="sobretitulo">ATIVIDADE DE BANCO DE DADOS</p><h1>Alunos <span>NoSQL</span></h1></div></div>
+      <span class="status"><i></i> Firestore</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="introducao">
+      <p class="sobretitulo">GERENCIAMENTO ACADÊMICO</p>
+      <h2>Cadastro de alunos</h2>
+      <p>Cadastre, consulte, atualize e exclua registros armazenados no Firebase Cloud Firestore.</p>
+    </section>
+
+    <div id="aviso" class="aviso" role="status" aria-live="polite" hidden></div>
+
+    <section class="painel">
+      <div class="painel-titulo"><div><p class="sobretitulo">CREATE / UPDATE</p><h2 id="titulo-form">Cadastrar aluno</h2></div><span class="numero">01</span></div>
+      <form id="form-aluno">
+        <div class="grade-form">
+          <label>Nome completo<input id="nome" name="nome" maxlength="100" placeholder="Ex.: Ana Souza" required></label>
+          <label>Turma<input id="turma" name="turma" maxlength="30" placeholder="Ex.: 3DSB" required></label>
+          <label>Data de nascimento<input id="dataNascimento" name="dataNascimento" type="date" required></label>
+          <label class="campo-ativo">Situação<select id="ativo" name="ativo"><option value="true">Ativo</option><option value="false">Inativo</option></select></label>
+        </div>
+        <div class="acoes-form"><button class="botao principal" type="submit" id="salvar">Cadastrar aluno</button><button class="botao secundario" type="button" id="cancelar" hidden>Cancelar edição</button></div>
+      </form>
+    </section>
+
+    <section class="painel">
+      <div class="painel-titulo"><div><p class="sobretitulo">READ / CONSULTAS</p><h2>Alunos cadastrados</h2></div><span class="numero">02</span></div>
+      <form id="filtros" class="filtros">
+        <label>Filtrar por turma<input id="filtro-turma" placeholder="Ex.: 3DSB"></label>
+        <label>Filtrar por nascimento<input id="filtro-data" type="date"></label>
+        <button class="botao principal" type="submit">Pesquisar</button>
+        <button class="botao secundario" type="button" id="limpar">Limpar</button>
+      </form>
+      <div class="lista-cabecalho"><span id="total">0 alunos</span><button class="link-botao" id="atualizar-lista" type="button">Atualizar lista ↻</button></div>
+      <div id="lista" class="lista"><div class="vazio">Carregando alunos...</div></div>
+    </section>
+
+    <footer><span>Projeto acadêmico • Banco de Dados NoSQL</span><span>Node.js + Firebase Firestore</span></footer>
+  </main>
+  <script src="/app.js" defer></script>
+</body>
+</html>
