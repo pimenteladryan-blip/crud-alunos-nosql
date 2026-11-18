@@ -91,11 +91,24 @@ app.get("/api/health", (_req, res) => {
 // READ: lista todos ou filtra por turma e/ou data de nascimento.
 app.get("/api/alunos", async (req, res) => {
   try {
-    let consulta = alunos.orderBy("nome");
-    if (req.query.turma) consulta = consulta.where("turma", "==", String(req.query.turma).trim());
-    if (req.query.dataNascimento) consulta = consulta.where("dataNascimento", "==", String(req.query.dataNascimento));
+    const turma = req.query.turma ? String(req.query.turma).trim() : "";
+    const dataNascimento = req.query.dataNascimento ? String(req.query.dataNascimento) : "";
+    let consulta = alunos;
+
+    // Quando os dois filtros são usados juntos, filtramos o segundo em memória
+    // para evitar exigir um índice composto adicional no Firestore.
+    if (turma && !dataNascimento) consulta = consulta.where("turma", "==", turma);
+    if (dataNascimento && !turma) consulta = consulta.where("dataNascimento", "==", dataNascimento);
+
     const snapshot = await consulta.get();
-    res.json(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+    let resultado = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    if (turma && dataNascimento) {
+      resultado = resultado.filter((aluno) =>
+        aluno.turma === turma && aluno.dataNascimento === dataNascimento
+      );
+    }
+    resultado.sort((a, b) => String(a.nome).localeCompare(String(b.nome), "pt-BR"));
+    res.json(resultado);
   } catch (erro) {
     console.error("Erro ao listar alunos:", erro);
     res.status(500).json({ erro: "Não foi possível listar os alunos." });
